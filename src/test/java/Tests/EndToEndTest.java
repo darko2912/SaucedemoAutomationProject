@@ -2,6 +2,7 @@ package Tests;
 
 import Base.BaseTest;
 import Base.ExcelReader;
+import Base.RetryAnalyzer;
 import Pages.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -34,7 +35,7 @@ public class EndToEndTest extends BaseTest {
         checkoutPage = new CheckoutPage();
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void endToEndTest(){
         //Login
         String validUsername = excelReader.getStringData("Login", 1,0);

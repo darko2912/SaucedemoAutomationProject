@@ -79,7 +79,7 @@ public class InventoryPage extends BaseTest {
     public void clickOnLogoutButton(){
         logoutButton.click();
     }
-
+    //Method for checking if the logout button is visible.
     public boolean logoutButtonIsDisplayed(){
         boolean isPresentLogoutButton = false;
         try {
@@ -89,7 +89,7 @@ public class InventoryPage extends BaseTest {
         }
         return isPresentLogoutButton;
     }
-
+    //Method for checking if the products are visible on the page.
     public boolean productsAreVisible(){
         boolean isPresentProducts = false;
         for (int i=0; i< listOfProducts.size(); i++){
@@ -121,7 +121,7 @@ public class InventoryPage extends BaseTest {
     public void clickOnSortPriceHighToLow(){
         sortPriceHighToLow.click();
     }
-
+    //Method for clicking multiple add to cart buttons.
     public void clickOnAddToCartButton(int addProducts){
         for (int i=addProducts-1; i>=0; i--){
             addToCartButton.get(i).click();
@@ -131,7 +131,7 @@ public class InventoryPage extends BaseTest {
     public void clickOnCartIcon(){
         cartIcon.click();
     }
-
+    //Method for checking if the cart is empty.
     public boolean isNotEmptyCart() {
         boolean isEmpty = false;
         try {
@@ -141,7 +141,7 @@ public class InventoryPage extends BaseTest {
         }
         return isEmpty;
     }
-
+    //Method for clicking on a specific product.
     public void clickOnProduct(String nameOfProduct){
         for (int i=0; i<productsName.size(); i++){
             if (productsName.get(i).getText().equals(nameOfProduct)){
@@ -150,7 +150,7 @@ public class InventoryPage extends BaseTest {
             }
         }
     }
-
+    //Method for clicking multiple remove buttons.
     public void clickOnRemoveButton(int removeProducts){
         for (int i=removeButton.size()-1; i>=0; i--){
             removeButton.get(i).click();

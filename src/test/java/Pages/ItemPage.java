@@ -45,7 +45,7 @@ public class ItemPage extends BaseTest {
     public void clickOnCartIcon(){
         cartIcon.click();
     }
-
+    //Method for checking if the cart is empty.
     public boolean isNotemptyCart() {
         boolean isEmpty = false;
         try {
@@ -55,7 +55,7 @@ public class ItemPage extends BaseTest {
         }
         return isEmpty;
     }
-
+    //Method for checking if the image of product is displayed.
     public boolean imageCanBeSeen(){
         boolean isPresent = false;
         try {
