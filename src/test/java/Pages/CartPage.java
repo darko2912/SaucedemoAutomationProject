@@ -44,7 +44,7 @@ public class CartPage extends BaseTest {
     public WebElement checkoutButton;
 
     //-------------------------------------
-
+    //Method for checking if a specific product is in the cart.
     public boolean productIsInTheCart(String productName){
         boolean isPresent = false;
         for (int i=0; i<listOfProductsName.size(); i++){
@@ -55,7 +55,7 @@ public class CartPage extends BaseTest {
         }
         return isPresent;
     }
-
+    //Method for checking if the cart is empty.
     public boolean cartIsEmpty(){
         boolean emptyCart = false;
         try {
@@ -77,7 +77,7 @@ public class CartPage extends BaseTest {
     public void clickOnAllItemsButton(){
         allItemsButton.click();
     }
-
+    //Method for clicking multiple remove buttons.
     public void clickOnRemoveButton(int removeProducts){
         for (int i=removeButton.size()-1; i>=0; i--){
             removeButton.get(i).click();
@@ -103,7 +103,7 @@ public class CartPage extends BaseTest {
     public void clickOnCheckoutButton(){
         checkoutButton.click();
     }
-
+    //Method for clicking a specific product in the cart.
     public void selectSpecifiedProductFromCart(String nameOfProduct){
         for (int i=0; i<listOfProductsName.size(); i++){
             if (listOfProductsName.get(i).getText().equals(nameOfProduct)) {

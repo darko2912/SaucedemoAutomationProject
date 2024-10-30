@@ -2,6 +2,7 @@ package Tests;
 
 import Base.BaseTest;
 import Base.ExcelReader;
+import Base.RetryAnalyzer;
 import Pages.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -39,7 +40,7 @@ public class CartPageTest extends BaseTest {
         checkoutPage = new CheckoutPage();
     }
 
-    @Test (priority = 10)
+    @Test (priority = 10, retryAnalyzer = RetryAnalyzer.class)
     public void userCanCountinueShoppingWhenIsLocatedInTheCart(){
         loginStandard_user();
         String productName = "Sauce Labs Bike Light";
@@ -62,7 +63,7 @@ public class CartPageTest extends BaseTest {
         Assert.assertTrue(cartPage.productIsInTheCart(productName2));
     }
 
-    @Test(priority = 20)
+    @Test(priority = 20, retryAnalyzer = RetryAnalyzer.class)
     public void userCanReturnToTheProductPage(){
         loginStandard_user();
         inventoryPage.clickOnCartIcon();
@@ -73,7 +74,7 @@ public class CartPageTest extends BaseTest {
         Assert.assertTrue(inventoryPage.productsAreVisible());
     }
 
-    @Test(priority = 30)
+    @Test(priority = 30, retryAnalyzer = RetryAnalyzer.class)
     public void userCanRemoveProductFromCart(){
         loginStandard_user();
         int numberOfAddedProducts = 1;
@@ -88,7 +89,7 @@ public class CartPageTest extends BaseTest {
         Assert.assertFalse(inventoryPage.isNotEmptyCart());
     }
 
-    @Test(priority = 40)
+    @Test(priority = 40, retryAnalyzer = RetryAnalyzer.class)
     public void userCanVisitLinkedinProfileOfSaucedemo(){
         loginStandard_user();
         inventoryPage.clickOnCartIcon();
@@ -98,7 +99,7 @@ public class CartPageTest extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.linkedin.com/company/sauce-labs/");
     }
 
-    @Test(priority = 50)
+    @Test(priority = 50, retryAnalyzer = RetryAnalyzer.class)
     public void userCanVisitFacebookProfileOfSaucedemo(){
         loginStandard_user();
         inventoryPage.clickOnCartIcon();
@@ -108,7 +109,7 @@ public class CartPageTest extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.facebook.com/saucelabs");
     }
 
-    @Test(priority = 60)
+    @Test(priority = 60, retryAnalyzer = RetryAnalyzer.class)
     public void userCanVisitTwitterProfileOfSaucedemo(){
         loginStandard_user();
         inventoryPage.clickOnCartIcon();
@@ -118,7 +119,7 @@ public class CartPageTest extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://x.com/saucelabs");
     }
 
-    @Test(priority = 70)
+    @Test(priority = 70, retryAnalyzer = RetryAnalyzer.class)
     public void userCanRedirectedToAboutPage(){
         loginStandard_user();
         inventoryPage.clickOnCartIcon();
@@ -128,7 +129,7 @@ public class CartPageTest extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://saucelabs.com/");
     }
 
-    @Test(priority = 80)
+    @Test(priority = 80, retryAnalyzer = RetryAnalyzer.class)
     public void userCannotProceedTheOrderWithEmptyCart(){
         loginStandard_user();
         inventoryPage.clickOnCartIcon();

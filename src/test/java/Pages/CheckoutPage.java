@@ -74,7 +74,7 @@ public class CheckoutPage extends BaseTest {
     public void clickOnFinishButton(){
         finishButton.click();
     }
-
+    //Method for checking if the "Overview" title is displayed.
     public boolean overviewTitleIsDisplayed(){
         boolean isPresent = false;
         if (overviewTitle.isDisplayed() && overviewTitle.getText().equals("Checkout: Overview")){
@@ -82,7 +82,7 @@ public class CheckoutPage extends BaseTest {
         }
         return isPresent;
     }
-
+    //Method for checking if the "Overview" page is empty.
     public boolean overviewIsNotEmpty(){
         boolean notEmpty = false;
         if (!lsitOfProducts.isEmpty()){

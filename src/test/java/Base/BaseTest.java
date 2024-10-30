@@ -39,11 +39,11 @@ public class BaseTest {
     public void tearDown(){
         driver.quit();
     }
-
+    //Method for scrolling to the desired element.
     public void scrollToElement(WebElement element) {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
-
+    //Login method.
     public void loginStandard_user() {
         String validUsername = excelReader.getStringData("Login", 1, 0);
         String validPassword = excelReader.getStringData("Login", 1, 1);
@@ -51,12 +51,12 @@ public class BaseTest {
         loginPage.inputPassword(validPassword);
         loginPage.clickOnLoginButton();
     }
-
+    //Method for setting focus on a specific tab.
     public void switchTab(int tab){
         ArrayList<String> listaTabova = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(listaTabova.get(tab));
     }
-
+    //Login method.
     public void loginProblem_user() {
         String validUsername = excelReader.getStringData("Login", 3, 0);
         String validPassword = excelReader.getStringData("Login", 1, 1);
@@ -64,7 +64,7 @@ public class BaseTest {
         loginPage.inputPassword(validPassword);
         loginPage.clickOnLoginButton();
     }
-
+    //Method for logging in and adding a product to the cart.
     public void loginAndAddProductToTheCart(){
         loginStandard_user();
         int numberOfAddedProducts = 1;

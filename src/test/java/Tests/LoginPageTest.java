@@ -2,6 +2,7 @@ package Tests;
 
 import Base.BaseTest;
 import Base.ExcelReader;
+import Base.RetryAnalyzer;
 import Pages.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -35,8 +36,8 @@ public class LoginPageTest extends BaseTest {
         checkoutPage = new CheckoutPage();
     }
 
-    @Test (priority = 10)
-    public void userCanLogInWithValidCredentials(){
+    @Test (priority = 10, retryAnalyzer = RetryAnalyzer.class)
+    public void userCanLogIn(){
         String validUsername = excelReader.getStringData("Login", 1,0);
         String validPassword = excelReader.getStringData("Login", 1,1);
         String loginURL = driver.getCurrentUrl();
@@ -46,12 +47,47 @@ public class LoginPageTest extends BaseTest {
 
         Assert.assertNotEquals(loginURL, "https://www.saucedemo.com/inventory.html");
         inventoryPage.clickOnHamburgerButton();
+        wait.until(ExpectedConditions.visibilityOf(inventoryPage.logoutButton));
         Assert.assertTrue(inventoryPage.logoutButtonIsDisplayed());
         Assert.assertTrue(inventoryPage.productsAreVisible());
     }
 
-    @Test (priority = 20)
-    public void userCannotLogInWithInvalidCredentials(){
+    @Test(priority = 20, retryAnalyzer = RetryAnalyzer.class)
+    public void userCanLogout() {
+            String validUsername = excelReader.getStringData("InventoryPage", 1, 0);
+            String validPassword = excelReader.getStringData("InventoryPage", 1, 1);
+            String loginURL = driver.getCurrentUrl();
+            loginPage.inputUsername(validUsername);
+            loginPage.inputPassword(validPassword);
+            loginPage.clickOnLoginButton();
+            inventoryPage.clickOnHamburgerButton();
+            inventoryPage.clickOnLogoutButton();
+
+            Assert.assertEquals(loginURL, driver.getCurrentUrl());
+            Assert.assertFalse(inventoryPage.logoutButtonIsDisplayed());
+            Assert.assertTrue(loginPage.loginButton.isDisplayed());
+    }
+
+    @Test(priority = 30, retryAnalyzer = RetryAnalyzer.class)
+    public void userCannotLoginWithEmptyFieldAfterLoggingOut() {
+            String validUsername = excelReader.getStringData("InventoryPage", 1, 0);
+            String validPassword = excelReader.getStringData("InventoryPage", 1, 1);
+            String loginURL = driver.getCurrentUrl();
+            loginPage.inputUsername(validUsername);
+            loginPage.inputPassword(validPassword);
+            loginPage.clickOnLoginButton();
+            inventoryPage.clickOnHamburgerButton();
+            inventoryPage.clickOnLogoutButton();
+            loginPage.clickOnLoginButton();
+
+            Assert.assertEquals(loginURL, driver.getCurrentUrl());
+            Assert.assertFalse(inventoryPage.logoutButtonIsDisplayed());
+            Assert.assertTrue(loginPage.loginButton.isDisplayed());
+            Assert.assertEquals(loginPage.errorMessage.getText(), "Epic sadface: Username is required");
+    }
+
+    @Test (priority = 40, retryAnalyzer = RetryAnalyzer.class)
+    public void userCannotLogInWithInvalidUsernameAndPassword(){
         for (int i=1; i<=excelReader.getLastRow("Login"); i++) {
             String invalidUsername = excelReader.getStringData("Login", i, 2);
             String invalidPassword = excelReader.getStringData("Login", i, 2);
@@ -67,7 +103,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test (priority = 30)
+    @Test (priority = 50, retryAnalyzer = RetryAnalyzer.class)
     public void userCannotLogInWithEmptyFields(){
             String loginURL = driver.getCurrentUrl();
             loginPage.inputUsername("");
@@ -80,7 +116,7 @@ public class LoginPageTest extends BaseTest {
             Assert.assertEquals(loginPage.errorMessage.getText(), "Epic sadface: Username is required");
     }
 
-    @Test (priority = 40)
+    @Test (priority = 60, retryAnalyzer = RetryAnalyzer.class)
     public void userCannotLogInWithInvalidUsername(){
         for (int i=1; i<=excelReader.getLastRow("Login"); i++) {
             String invalidUsername = excelReader.getStringData("Login", i, 2);
@@ -97,7 +133,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test (priority = 50)
+    @Test (priority = 70, retryAnalyzer = RetryAnalyzer.class)
     public void userCannotLogInWithInvalidPassword(){
         for (int i=1; i<=excelReader.getLastRow("Login"); i++) {
             String validUsername = excelReader.getStringData("Login", 1, 0);
@@ -114,7 +150,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test (priority = 60)
+    @Test (priority = 80, retryAnalyzer = RetryAnalyzer.class)
     public void userWhoIsLockedOutCannotLogIn(){
         String validUsername = excelReader.getStringData("Login", 2,0);
         String validPassword = excelReader.getStringData("Login", 1,1);
@@ -129,7 +165,7 @@ public class LoginPageTest extends BaseTest {
         Assert.assertEquals(loginPage.errorMessage.getText(), "Epic sadface: Sorry, this user has been locked out.");
     }
 
-    @Test (priority = 70)
+    @Test (priority = 90, retryAnalyzer = RetryAnalyzer.class)
     public void certainUserCanLogIn(){
         for (int i=3; i<=excelReader.getLastRow("Login"); i++) {
             String validUsername = excelReader.getStringData("Login", i, 0);

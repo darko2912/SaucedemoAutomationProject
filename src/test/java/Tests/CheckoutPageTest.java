@@ -2,6 +2,7 @@ package Tests;
 
 import Base.BaseTest;
 import Base.ExcelReader;
+import Base.RetryAnalyzer;
 import Pages.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -34,7 +35,7 @@ public class CheckoutPageTest extends BaseTest {
         checkoutPage = new CheckoutPage();
     }
 
-    @Test(priority = 10)
+    @Test(priority = 10, retryAnalyzer = RetryAnalyzer.class)
     public void userCanOrderItems(){
         loginAndAddProductToTheCart();
         cartPage.clickOnCheckoutButton();
@@ -61,7 +62,7 @@ public class CheckoutPageTest extends BaseTest {
         Assert.assertTrue(cartPage.cartIsEmpty());
     }
 
-    @Test(priority = 20)
+    @Test(priority = 20, retryAnalyzer = RetryAnalyzer.class)
     public void userCannotOrderItemsWithEmptyFirstName(){
         loginAndAddProductToTheCart();
         cartPage.clickOnCheckoutButton();
@@ -78,7 +79,7 @@ public class CheckoutPageTest extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-step-one.html");
     }
 
-    @Test(priority = 30)
+    @Test(priority = 30, retryAnalyzer = RetryAnalyzer.class)
     public void userCannotOrderItemsWithEmptyLastName(){
         loginAndAddProductToTheCart();
         cartPage.clickOnCheckoutButton();
@@ -95,7 +96,7 @@ public class CheckoutPageTest extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-step-one.html");
     }
 
-    @Test(priority = 40)
+    @Test(priority = 40, retryAnalyzer = RetryAnalyzer.class)
     public void userCannotOrderItemWithEmptyPostalCode(){
         loginAndAddProductToTheCart();
         cartPage.clickOnCheckoutButton();
@@ -112,7 +113,7 @@ public class CheckoutPageTest extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-step-one.html");
     }
 
-    @Test(priority = 50)
+    @Test(priority = 50, retryAnalyzer = RetryAnalyzer.class)
     public void userCanCancelCheckout(){
         loginAndAddProductToTheCart();
         cartPage.clickOnCheckoutButton();
@@ -137,6 +138,6 @@ public class CheckoutPageTest extends BaseTest {
 
     @AfterMethod
     public void tearDownTest(){
-        //driver.quit();
+        driver.quit();
     }
 }
