@@ -1,5 +1,7 @@
 package Base;
 
+import Helpers.Data;
+import Helpers.URLs;
 import Pages.*;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -16,12 +18,14 @@ public class BaseTest {
     public static WebDriver driver;
     public WebDriverWait wait;
 
-    public ExcelReader excelReader;
+    public static ExcelReader excelReader;
     public LoginPage loginPage;
     public InventoryPage inventoryPage;
     public ItemPage itemPage;
     public CartPage cartPage;
     public CheckoutPage checkoutPage;
+    public URLs urls;
+    public Data data;
 
     @BeforeClass
     public void setUp() throws IOException {
@@ -32,6 +36,8 @@ public class BaseTest {
         itemPage = new ItemPage();
         cartPage = new CartPage();
         checkoutPage = new CheckoutPage();
+        urls = new URLs();
+        data = new Data();
 
     }
 
@@ -44,7 +50,7 @@ public class BaseTest {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
     //Login method.
-    public void loginStandard_user() {
+    public void loginUser() {
         String validUsername = excelReader.getStringData("Login", 1, 0);
         String validPassword = excelReader.getStringData("Login", 1, 1);
         loginPage.inputUsername(validUsername);
@@ -66,7 +72,7 @@ public class BaseTest {
     }
     //Method for logging in and adding a product to the cart.
     public void loginAndAddProductToTheCart(){
-        loginStandard_user();
+        loginUser();
         int numberOfAddedProducts = 1;
         inventoryPage.clickOnAddToCartButton(numberOfAddedProducts);
         inventoryPage.clickOnCartIcon();
