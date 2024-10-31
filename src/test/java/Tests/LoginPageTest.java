@@ -16,6 +16,11 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.time.Duration;
 
+import static Helpers.Data.validPassword;
+import static Helpers.Data.validUsername;
+import static Helpers.URLs.inventoryURL;
+import static Helpers.URLs.loginURL;
+
 public class LoginPageTest extends BaseTest {
 
     @BeforeMethod
@@ -26,7 +31,7 @@ public class LoginPageTest extends BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         wait = new WebDriverWait(driver, Duration.ofSeconds(3));
 
-        driver.navigate().to("https://www.saucedemo.com/");
+        driver.navigate().to(loginURL);
 
         excelReader = new ExcelReader("Test Data.xlsx");
         loginPage = new LoginPage();
@@ -38,14 +43,11 @@ public class LoginPageTest extends BaseTest {
 
     @Test (priority = 10, retryAnalyzer = RetryAnalyzer.class)
     public void userCanLogIn(){
-        String validUsername = excelReader.getStringData("Login", 1,0);
-        String validPassword = excelReader.getStringData("Login", 1,1);
-        String loginURL = driver.getCurrentUrl();
         loginPage.inputUsername(validUsername);
         loginPage.inputPassword(validPassword);
         loginPage.clickOnLoginButton();
 
-        Assert.assertNotEquals(loginURL, "https://www.saucedemo.com/inventory.html");
+        Assert.assertNotEquals(loginURL, inventoryURL);
         inventoryPage.clickOnHamburgerButton();
         wait.until(ExpectedConditions.visibilityOf(inventoryPage.logoutButton));
         Assert.assertTrue(inventoryPage.logoutButtonIsDisplayed());
@@ -54,9 +56,6 @@ public class LoginPageTest extends BaseTest {
 
     @Test(priority = 20, retryAnalyzer = RetryAnalyzer.class)
     public void userCanLogout() {
-            String validUsername = excelReader.getStringData("InventoryPage", 1, 0);
-            String validPassword = excelReader.getStringData("InventoryPage", 1, 1);
-            String loginURL = driver.getCurrentUrl();
             loginPage.inputUsername(validUsername);
             loginPage.inputPassword(validPassword);
             loginPage.clickOnLoginButton();
@@ -70,9 +69,6 @@ public class LoginPageTest extends BaseTest {
 
     @Test(priority = 30, retryAnalyzer = RetryAnalyzer.class)
     public void userCannotLoginWithEmptyFieldAfterLoggingOut() {
-            String validUsername = excelReader.getStringData("InventoryPage", 1, 0);
-            String validPassword = excelReader.getStringData("InventoryPage", 1, 1);
-            String loginURL = driver.getCurrentUrl();
             loginPage.inputUsername(validUsername);
             loginPage.inputPassword(validPassword);
             loginPage.clickOnLoginButton();
@@ -91,7 +87,6 @@ public class LoginPageTest extends BaseTest {
         for (int i=1; i<=excelReader.getLastRow("Login"); i++) {
             String invalidUsername = excelReader.getStringData("Login", i, 2);
             String invalidPassword = excelReader.getStringData("Login", i, 2);
-            String loginURL = driver.getCurrentUrl();
             loginPage.inputUsername(invalidUsername);
             loginPage.inputPassword(invalidPassword);
             loginPage.clickOnLoginButton();
@@ -105,7 +100,6 @@ public class LoginPageTest extends BaseTest {
 
     @Test (priority = 50, retryAnalyzer = RetryAnalyzer.class)
     public void userCannotLogInWithEmptyFields(){
-            String loginURL = driver.getCurrentUrl();
             loginPage.inputUsername("");
             loginPage.inputPassword("");
             loginPage.clickOnLoginButton();
@@ -121,7 +115,6 @@ public class LoginPageTest extends BaseTest {
         for (int i=1; i<=excelReader.getLastRow("Login"); i++) {
             String invalidUsername = excelReader.getStringData("Login", i, 2);
             String validPassword = excelReader.getStringData("Login", 1, 1);
-            String loginURL = driver.getCurrentUrl();
             loginPage.inputUsername(invalidUsername);
             loginPage.inputPassword(validPassword);
             loginPage.clickOnLoginButton();
@@ -138,7 +131,6 @@ public class LoginPageTest extends BaseTest {
         for (int i=1; i<=excelReader.getLastRow("Login"); i++) {
             String validUsername = excelReader.getStringData("Login", 1, 0);
             String invalidPassword = excelReader.getStringData("Login", i, 3);
-            String loginURL = driver.getCurrentUrl();
             loginPage.inputUsername(validUsername);
             loginPage.inputPassword(invalidPassword);
             loginPage.clickOnLoginButton();
@@ -154,7 +146,6 @@ public class LoginPageTest extends BaseTest {
     public void userWhoIsLockedOutCannotLogIn(){
         String validUsername = excelReader.getStringData("Login", 2,0);
         String validPassword = excelReader.getStringData("Login", 1,1);
-        String loginURL = driver.getCurrentUrl();
         loginPage.inputUsername(validUsername);
         loginPage.inputPassword(validPassword);
         loginPage.clickOnLoginButton();
@@ -170,18 +161,18 @@ public class LoginPageTest extends BaseTest {
         for (int i=3; i<=excelReader.getLastRow("Login"); i++) {
             String validUsername = excelReader.getStringData("Login", i, 0);
             String validPassword = excelReader.getStringData("Login", 1, 1);
-            String loginURL = driver.getCurrentUrl();
             loginPage.inputUsername(validUsername);
             loginPage.inputPassword(validPassword);
             loginPage.clickOnLoginButton();
 
-            Assert.assertNotEquals(loginURL, "https://www.saucedemo.com/inventory.html");
+            Assert.assertNotEquals(loginURL, inventoryURL);
             inventoryPage.clickOnHamburgerButton();
             wait.until(ExpectedConditions.visibilityOf(inventoryPage.logoutButton));
             Assert.assertTrue(inventoryPage.logoutButtonIsDisplayed());
             Assert.assertTrue(inventoryPage.productsAreVisible());
 
-            driver.navigate().to("https://www.saucedemo.com/");
+            driver.navigate().to(loginURL);
+            driver.manage().deleteAllCookies();
         }
     }
 

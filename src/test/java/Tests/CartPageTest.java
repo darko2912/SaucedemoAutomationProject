@@ -16,6 +16,8 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.time.Duration;
 
+import static Helpers.URLs.*;
+
 public class CartPageTest extends BaseTest {
 
     public CartPageTest(){
@@ -30,7 +32,7 @@ public class CartPageTest extends BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         wait = new WebDriverWait(driver, Duration.ofSeconds(3));
 
-        driver.navigate().to("https://www.saucedemo.com/");
+        driver.navigate().to(loginURL);
 
         excelReader = new ExcelReader("Test Data.xlsx");
         loginPage = new LoginPage();
@@ -42,7 +44,7 @@ public class CartPageTest extends BaseTest {
 
     @Test (priority = 10, retryAnalyzer = RetryAnalyzer.class)
     public void userCanCountinueShoppingWhenIsLocatedInTheCart(){
-        loginStandard_user();
+        loginUser();
         String productName = "Sauce Labs Bike Light";
         inventoryPage.clickOnProduct(productName);
         Assert.assertEquals(itemPage.nameOfProduct.getText(), productName);
@@ -65,18 +67,18 @@ public class CartPageTest extends BaseTest {
 
     @Test(priority = 20, retryAnalyzer = RetryAnalyzer.class)
     public void userCanReturnToTheProductPage(){
-        loginStandard_user();
+        loginUser();
         inventoryPage.clickOnCartIcon();
         cartPage.clickOnHamburgerButton();
         cartPage.clickOnAllItemsButton();
 
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/inventory.html");
+        Assert.assertEquals(driver.getCurrentUrl(), inventoryURL);
         Assert.assertTrue(inventoryPage.productsAreVisible());
     }
 
     @Test(priority = 30, retryAnalyzer = RetryAnalyzer.class)
     public void userCanRemoveProductFromCart(){
-        loginStandard_user();
+        loginUser();
         int numberOfAddedProducts = 1;
         inventoryPage.clickOnAddToCartButton(numberOfAddedProducts);
         Assert.assertTrue(inventoryPage.isNotEmptyCart());
@@ -91,52 +93,54 @@ public class CartPageTest extends BaseTest {
 
     @Test(priority = 40, retryAnalyzer = RetryAnalyzer.class)
     public void userCanVisitLinkedinProfileOfSaucedemo(){
-        loginStandard_user();
+        loginUser();
         inventoryPage.clickOnCartIcon();
         scrollToElement(cartPage.linkedinIcon);
         cartPage.clickOnLinkedinIcon();
         switchTab(1);
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.linkedin.com/company/sauce-labs/");
+        Assert.assertEquals(driver.getCurrentUrl(), linkedinURL);
     }
 
     @Test(priority = 50, retryAnalyzer = RetryAnalyzer.class)
     public void userCanVisitFacebookProfileOfSaucedemo(){
-        loginStandard_user();
+        loginUser();
         inventoryPage.clickOnCartIcon();
         scrollToElement(cartPage.facebookIcon);
         cartPage.clickOnFacebookIcon();
         switchTab(1);
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.facebook.com/saucelabs");
+        Assert.assertEquals(driver.getCurrentUrl(), facebookURL);
     }
 
     @Test(priority = 60, retryAnalyzer = RetryAnalyzer.class)
     public void userCanVisitTwitterProfileOfSaucedemo(){
-        loginStandard_user();
+        loginUser();
         inventoryPage.clickOnCartIcon();
         scrollToElement(cartPage.twitterIcon);
         cartPage.clickOnTwitterIcon();
         switchTab(1);
-        Assert.assertEquals(driver.getCurrentUrl(), "https://x.com/saucelabs");
+        Assert.assertEquals(driver.getCurrentUrl(), twitterURL);
     }
 
     @Test(priority = 70, retryAnalyzer = RetryAnalyzer.class)
     public void userCanRedirectedToAboutPage(){
-        loginStandard_user();
+        loginUser();
         inventoryPage.clickOnCartIcon();
         cartPage.clickOnHamburgerButton();
         cartPage.clickOnAboutButton();
         switchTab(1);
-        Assert.assertEquals(driver.getCurrentUrl(), "https://saucelabs.com/");
+        Assert.assertEquals(driver.getCurrentUrl(), aboutURL);
+        Assert.assertEquals(driver.getTitle(), "Sauce Labs: Cross Browser Testing, Selenium Testing & Mobile Testing");
     }
 
     @Test(priority = 80, retryAnalyzer = RetryAnalyzer.class)
     public void userCannotProceedTheOrderWithEmptyCart(){
-        loginStandard_user();
+        loginUser();
         inventoryPage.clickOnCartIcon();
         Assert.assertTrue(cartPage.cartIsEmpty());
         cartPage.clickOnCheckoutButton();
 
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/cart.html");
+        Assert.assertEquals(driver.getCurrentUrl(), cartURL);
+        Assert.assertFalse(cartPage.cartIsEmpty());
     }
 
     @AfterMethod

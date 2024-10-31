@@ -15,6 +15,8 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.time.Duration;
 
+import static Helpers.URLs.*;
+
 public class CheckoutPageTest extends BaseTest {
 
     @BeforeMethod
@@ -25,7 +27,7 @@ public class CheckoutPageTest extends BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         wait = new WebDriverWait(driver, Duration.ofSeconds(3));
 
-        driver.navigate().to("https://www.saucedemo.com/");
+        driver.navigate().to(loginURL);
 
         excelReader = new ExcelReader("Test Data.xlsx");
         loginPage = new LoginPage();
@@ -39,6 +41,7 @@ public class CheckoutPageTest extends BaseTest {
     public void userCanOrderItems(){
         loginAndAddProductToTheCart();
         cartPage.clickOnCheckoutButton();
+        Assert.assertEquals(driver.getCurrentUrl(), checkoutStepOneURL);
         String validFirstName = excelReader.getStringData("CheckoutPage",1,0);
         String validLastName = excelReader.getStringData("CheckoutPage", 1,1);
         String validPostalCode = String.valueOf(excelReader.getIntegerData("CheckoutPage", 1,2));
@@ -49,13 +52,15 @@ public class CheckoutPageTest extends BaseTest {
 
         Assert.assertTrue(checkoutPage.overviewTitleIsDisplayed());
         Assert.assertTrue(checkoutPage.overviewIsNotEmpty());
+        Assert.assertEquals(driver.getCurrentUrl(), checkoutStepTwoURL);
 
         checkoutPage.clickOnFinishButton();
         Assert.assertTrue(checkoutPage.completeMessage.isDisplayed());
         Assert.assertEquals(checkoutPage.completeMessage.getText(), "Thank you for your order!");
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-complete.html");
+        Assert.assertEquals(driver.getCurrentUrl(), finishURL);
 
         checkoutPage.clickOnBackHomeButton();
+        Assert.assertEquals(driver.getCurrentUrl(), inventoryURL);
         Assert.assertFalse(inventoryPage.isNotEmptyCart());
         Assert.assertTrue(inventoryPage.removeButton.isEmpty());
         inventoryPage.clickOnCartIcon();
@@ -76,7 +81,7 @@ public class CheckoutPageTest extends BaseTest {
 
         Assert.assertTrue(checkoutPage.errorMessage.isDisplayed());
         Assert.assertEquals(checkoutPage.errorMessage.getText(), "Error: First Name is required");
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-step-one.html");
+        Assert.assertEquals(driver.getCurrentUrl(), checkoutStepOneURL);
     }
 
     @Test(priority = 30, retryAnalyzer = RetryAnalyzer.class)
@@ -93,7 +98,7 @@ public class CheckoutPageTest extends BaseTest {
 
         Assert.assertTrue(checkoutPage.errorMessage.isDisplayed());
         Assert.assertEquals(checkoutPage.errorMessage.getText(), "Error: Last Name is required");
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-step-one.html");
+        Assert.assertEquals(driver.getCurrentUrl(), checkoutStepOneURL);
     }
 
     @Test(priority = 40, retryAnalyzer = RetryAnalyzer.class)
@@ -110,7 +115,7 @@ public class CheckoutPageTest extends BaseTest {
 
         Assert.assertTrue(checkoutPage.errorMessage.isDisplayed());
         Assert.assertEquals(checkoutPage.errorMessage.getText(), "Error: Postal Code is required");
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-step-one.html");
+        Assert.assertEquals(driver.getCurrentUrl(), checkoutStepOneURL);
     }
 
     @Test(priority = 50, retryAnalyzer = RetryAnalyzer.class)
@@ -130,7 +135,7 @@ public class CheckoutPageTest extends BaseTest {
 
         checkoutPage.clickOnCancelButton();
         Assert.assertTrue(inventoryPage.isNotEmptyCart());
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/inventory.html");
+        Assert.assertEquals(driver.getCurrentUrl(), inventoryURL);
         Assert.assertFalse(inventoryPage.removeButton.isEmpty());
         inventoryPage.clickOnCartIcon();
         Assert.assertFalse(cartPage.cartIsEmpty());
