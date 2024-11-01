@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.time.Duration;
 
 import static Helpers.URLs.*;
+import static Helpers.Data.*;
 
 public class CartPageTest extends BaseTest {
 
@@ -45,7 +46,7 @@ public class CartPageTest extends BaseTest {
     @Test (priority = 10, retryAnalyzer = RetryAnalyzer.class)
     public void userCanCountinueShoppingWhenIsLocatedInTheCart(){
         loginUser();
-        String productName = "Sauce Labs Bike Light";
+        String productName = listOfItems().get(0);
         inventoryPage.clickOnProduct(productName);
         Assert.assertEquals(itemPage.nameOfProduct.getText(), productName);
         itemPage.clickOnAddButton();
@@ -54,7 +55,7 @@ public class CartPageTest extends BaseTest {
         itemPage.clickOnCartIcon();
         Assert.assertTrue(cartPage.productIsInTheCart(productName));
         cartPage.clickOnContinueShoppingButton();
-        String productName2 = "Sauce Labs Backpack";
+        String productName2 = listOfItems().get(1);
         inventoryPage.clickOnProduct(productName2);
         Assert.assertEquals(itemPage.nameOfProduct.getText(), productName2);
         itemPage.clickOnAddButton();
@@ -129,7 +130,7 @@ public class CartPageTest extends BaseTest {
         cartPage.clickOnAboutButton();
         switchTab(1);
         Assert.assertEquals(driver.getCurrentUrl(), aboutURL);
-        Assert.assertEquals(driver.getTitle(), "Sauce Labs: Cross Browser Testing, Selenium Testing & Mobile Testing");
+        Assert.assertEquals(driver.getTitle(), titleAboutPage);
     }
 
     @Test(priority = 80, retryAnalyzer = RetryAnalyzer.class)

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.time.Duration;
 
 import static Helpers.URLs.*;
+import static Helpers.Data.*;
 
 public class EndToEndTest extends BaseTest {
 
@@ -40,15 +41,10 @@ public class EndToEndTest extends BaseTest {
     @Test(retryAnalyzer = RetryAnalyzer.class)
     public void endToEndTest(){
         //Login
-        String validUsername = excelReader.getStringData("Login", 1,0);
-        String validPassword = excelReader.getStringData("Login", 1,1);
-        String loginURL = driver.getCurrentUrl();
-        loginPage.inputUsername(validUsername);
-        loginPage.inputPassword(validPassword);
-        loginPage.clickOnLoginButton();
-        Assert.assertNotEquals(loginURL, inventoryURL);
+        loginUser();
+        Assert.assertEquals(driver.getCurrentUrl(), inventoryURL);
         //Add product 1
-        String productName = "Sauce Labs Bike Light";
+        String productName = listOfItems().get(0);
         inventoryPage.clickOnProduct(productName);
         Assert.assertEquals(itemPage.nameOfProduct.getText(), productName);
         itemPage.clickOnAddButton();
@@ -60,7 +56,7 @@ public class EndToEndTest extends BaseTest {
         cartPage.clickOnContinueShoppingButton();
         Assert.assertNotEquals(loginURL, inventoryURL);
         //Add product 2
-        String productName2 = "Sauce Labs Fleece Jacket";
+        String productName2 = listOfItems().get(1);
         inventoryPage.clickOnProduct(productName2);
         Assert.assertEquals(itemPage.nameOfProduct.getText(), productName2);
         itemPage.clickOnAddButton();
@@ -71,7 +67,7 @@ public class EndToEndTest extends BaseTest {
         //Countinue Shopping
         cartPage.clickOnContinueShoppingButton();
         //Add product 3
-        String productName3 = "Sauce Labs Bolt T-Shirt";
+        String productName3 = listOfItems().get(2);
         inventoryPage.clickOnProduct(productName3);
         Assert.assertEquals(itemPage.nameOfProduct.getText(), productName3);
         itemPage.clickOnAddButton();
@@ -97,7 +93,7 @@ public class EndToEndTest extends BaseTest {
         Assert.assertTrue(checkoutPage.overviewIsNotEmpty());
         checkoutPage.clickOnFinishButton();
         Assert.assertTrue(checkoutPage.completeMessage.isDisplayed());
-        Assert.assertEquals(checkoutPage.completeMessage.getText(), "Thank you for your order!");
+        Assert.assertEquals(checkoutPage.completeMessage.getText(), finishMessage);
         Assert.assertEquals(driver.getCurrentUrl(), finishURL);
         checkoutPage.clickOnBackHomeButton();
         Assert.assertFalse(inventoryPage.isNotEmptyCart());

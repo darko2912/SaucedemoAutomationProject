@@ -16,8 +16,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.time.Duration;
 
-import static Helpers.Data.validPassword;
-import static Helpers.Data.validUsername;
+import static Helpers.Data.*;
 import static Helpers.URLs.inventoryURL;
 import static Helpers.URLs.loginURL;
 
@@ -79,7 +78,7 @@ public class LoginPageTest extends BaseTest {
             Assert.assertEquals(loginURL, driver.getCurrentUrl());
             Assert.assertFalse(inventoryPage.logoutButtonIsDisplayed());
             Assert.assertTrue(loginPage.loginButton.isDisplayed());
-            Assert.assertEquals(loginPage.errorMessage.getText(), "Epic sadface: Username is required");
+            Assert.assertEquals(loginPage.errorMessage.getText(), errorRequireUsername);
     }
 
     @Test (priority = 40, retryAnalyzer = RetryAnalyzer.class)
@@ -94,7 +93,7 @@ public class LoginPageTest extends BaseTest {
             Assert.assertEquals(loginURL, driver.getCurrentUrl());
             Assert.assertFalse(inventoryPage.logoutButtonIsDisplayed());
             Assert.assertTrue(loginPage.errorMessage.isDisplayed());
-            Assert.assertEquals(loginPage.errorMessage.getText(), "Epic sadface: Username and password do not match any user in this service");
+            Assert.assertEquals(loginPage.errorMessage.getText(), errorIvnalidUsernameAndPassword);
         }
     }
 
@@ -107,7 +106,7 @@ public class LoginPageTest extends BaseTest {
             Assert.assertEquals(loginURL, driver.getCurrentUrl());
             Assert.assertFalse(inventoryPage.logoutButtonIsDisplayed());
             Assert.assertTrue(loginPage.errorMessage.isDisplayed());
-            Assert.assertEquals(loginPage.errorMessage.getText(), "Epic sadface: Username is required");
+            Assert.assertEquals(loginPage.errorMessage.getText(), errorRequireUsername);
     }
 
     @Test (priority = 60, retryAnalyzer = RetryAnalyzer.class)
@@ -122,7 +121,7 @@ public class LoginPageTest extends BaseTest {
             Assert.assertEquals(loginURL, driver.getCurrentUrl());
             Assert.assertFalse(inventoryPage.logoutButtonIsDisplayed());
             Assert.assertTrue(loginPage.errorMessage.isDisplayed());
-            Assert.assertEquals(loginPage.errorMessage.getText(), "Epic sadface: Username and password do not match any user in this service");
+            Assert.assertEquals(loginPage.errorMessage.getText(), errorIvnalidUsernameAndPassword);
         }
     }
 
@@ -138,7 +137,7 @@ public class LoginPageTest extends BaseTest {
             Assert.assertEquals(loginURL, driver.getCurrentUrl());
             Assert.assertFalse(inventoryPage.logoutButtonIsDisplayed());
             Assert.assertTrue(loginPage.errorMessage.isDisplayed());
-            Assert.assertEquals(loginPage.errorMessage.getText(), "Epic sadface: Username and password do not match any user in this service");
+            Assert.assertEquals(loginPage.errorMessage.getText(), errorIvnalidUsernameAndPassword);
         }
     }
 
@@ -153,7 +152,7 @@ public class LoginPageTest extends BaseTest {
         Assert.assertEquals(loginURL, driver.getCurrentUrl());
         Assert.assertFalse(inventoryPage.logoutButtonIsDisplayed());
         Assert.assertTrue(loginPage.errorMessage.isDisplayed());
-        Assert.assertEquals(loginPage.errorMessage.getText(), "Epic sadface: Sorry, this user has been locked out.");
+        Assert.assertEquals(loginPage.errorMessage.getText(), errorLockedOutUser);
     }
 
     @Test (priority = 90, retryAnalyzer = RetryAnalyzer.class)

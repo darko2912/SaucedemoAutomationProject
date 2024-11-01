@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.time.Duration;
 
+import static Helpers.Data.*;
 import static Helpers.URLs.*;
 
 public class CheckoutPageTest extends BaseTest {
@@ -56,7 +57,7 @@ public class CheckoutPageTest extends BaseTest {
 
         checkoutPage.clickOnFinishButton();
         Assert.assertTrue(checkoutPage.completeMessage.isDisplayed());
-        Assert.assertEquals(checkoutPage.completeMessage.getText(), "Thank you for your order!");
+        Assert.assertEquals(checkoutPage.completeMessage.getText(), finishMessage);
         Assert.assertEquals(driver.getCurrentUrl(), finishURL);
 
         checkoutPage.clickOnBackHomeButton();
@@ -80,7 +81,7 @@ public class CheckoutPageTest extends BaseTest {
         checkoutPage.clickOnContinueButton();
 
         Assert.assertTrue(checkoutPage.errorMessage.isDisplayed());
-        Assert.assertEquals(checkoutPage.errorMessage.getText(), "Error: First Name is required");
+        Assert.assertEquals(checkoutPage.errorMessage.getText(), errorRequireFirstName);
         Assert.assertEquals(driver.getCurrentUrl(), checkoutStepOneURL);
     }
 
@@ -97,7 +98,7 @@ public class CheckoutPageTest extends BaseTest {
         checkoutPage.clickOnContinueButton();
 
         Assert.assertTrue(checkoutPage.errorMessage.isDisplayed());
-        Assert.assertEquals(checkoutPage.errorMessage.getText(), "Error: Last Name is required");
+        Assert.assertEquals(checkoutPage.errorMessage.getText(), errorRequireLastName);
         Assert.assertEquals(driver.getCurrentUrl(), checkoutStepOneURL);
     }
 
@@ -114,7 +115,7 @@ public class CheckoutPageTest extends BaseTest {
         checkoutPage.clickOnContinueButton();
 
         Assert.assertTrue(checkoutPage.errorMessage.isDisplayed());
-        Assert.assertEquals(checkoutPage.errorMessage.getText(), "Error: Postal Code is required");
+        Assert.assertEquals(checkoutPage.errorMessage.getText(), errorRequirePostalCode);
         Assert.assertEquals(driver.getCurrentUrl(), checkoutStepOneURL);
     }
 

@@ -70,6 +70,15 @@ public class InventoryPage extends BaseTest {
     @FindBy(id = "reset_sidebar_link")
     public WebElement resetAppStateButton;
 
+    @FindBy(className = "bm-menu-wrap")
+    public WebElement hiddenMenu;
+
+    @FindBy(css = ".bm-item.menu-item")
+    public List<WebElement> listOfMenu;
+
+    @FindBy(id = "inventory_sidebar_link")
+    public WebElement allItemsButton;
+
     //-------------------------------------
 
     public void clickOnHamburgerButton(){
