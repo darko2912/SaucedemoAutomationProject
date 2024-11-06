@@ -41,37 +41,35 @@ public class InventoryPageTest extends BaseTest {
     @Test (priority = 10, retryAnalyzer = RetryAnalyzer.class)
     public void sortItemAtoZ(){
         loginUser();
-        inventoryPage.clickOnSortDropdown();
-        inventoryPage.clickOnSortNameAtoZ();
-        Assert.assertEquals(inventoryPage.productsName.get(0).getText(), listOfItems().getFirst());
-        Assert.assertEquals(inventoryPage.productsName.get(inventoryPage.productsName.size()-1).getText(), listOfItems().getLast());
+        data.setSaveList(inventoryPage.getAllItemsName());
+        inventoryPage.selectSortOption(AtoZ);
+        Assert.assertEquals(inventoryPage.getActiveSort(), "Name (A to Z)");
+        Assert.assertEquals(inventoryPage.getAllItemsName(), inventoryPage.getSortedList(data.getSaveList()));
     }
 
     @Test(priority = 20,retryAnalyzer = RetryAnalyzer.class)
     public void sortItemZtoA(){
         loginUser();
-        inventoryPage.clickOnSortDropdown();
-        inventoryPage.clickOnSortNameZtoA();
-        Assert.assertEquals(inventoryPage.productsName.get(0).getText(), listOfItems().getLast());
-        Assert.assertEquals(inventoryPage.productsName.get(inventoryPage.productsName.size()-1).getText(), listOfItems().getFirst());
+        data.setSaveList(inventoryPage.getAllItemsName());
+        inventoryPage.selectSortOption(ZtoA);
+        Assert.assertEquals(inventoryPage.getActiveSort(), "Name (Z to A)");
+        Assert.assertEquals(inventoryPage.getAllItemsName(), inventoryPage.getReversedList(data.getSaveList()));
     }
 
     @Test(priority = 30, retryAnalyzer = RetryAnalyzer.class)
-    public void sortPriceHighToLow(){
+    public void sortPriceHighToLow() throws Exception {
         loginUser();
-        inventoryPage.clickOnSortDropdown();
-        inventoryPage.clickOnSortPriceHighToLow();
-        Assert.assertEquals(inventoryPage.priceOfProducts.get(0).getText(), "$49.99");
-        Assert.assertEquals(inventoryPage.priceOfProducts.get(inventoryPage.priceOfProducts.size()-1).getText(), "$7.99");
+        inventoryPage.selectSortOption(HighToLow);
+        Assert.assertEquals(inventoryPage.getActiveSort(), "Price (high to low)");
+        Assert.assertTrue(inventoryPage.pricesAreSorted("highlow", inventoryPage.getPricesList()));
     }
 
     @Test(priority = 40, retryAnalyzer = RetryAnalyzer.class)
-    public void sortPriceLowToHigh(){
+    public void sortPriceLowToHigh() throws Exception {
         loginUser();
-        inventoryPage.clickOnSortDropdown();
-        inventoryPage.clickOnSortPriceLowToHigh();
-        Assert.assertEquals(inventoryPage.priceOfProducts.get(0).getText(), "$7.99");
-        Assert.assertEquals(inventoryPage.priceOfProducts.get(inventoryPage.priceOfProducts.size()-1).getText(), "$49.99");
+        inventoryPage.selectSortOption(LowToHigh);
+        Assert.assertEquals(inventoryPage.getActiveSort(), "Price (low to high)");
+        Assert.assertTrue(inventoryPage.pricesAreSorted("lowhigh", inventoryPage.getPricesList()));
     }
 
     @Test (priority = 50, retryAnalyzer = RetryAnalyzer.class)
@@ -101,7 +99,7 @@ public class InventoryPageTest extends BaseTest {
     @Test(priority = 70, retryAnalyzer = RetryAnalyzer.class)
     public void userCanAddSpecifiedProductToTheCart(){
         loginUser();
-        String productName = listOfItems().get(2);
+        String productName = data.randomProductName();
         inventoryPage.clickOnProduct(productName);
         Assert.assertEquals(itemPage.nameOfProduct.getText(), productName);
         itemPage.clickOnAddButton();
@@ -197,7 +195,7 @@ public class InventoryPageTest extends BaseTest {
 
     @AfterMethod
     public void tearDownTest(){
-        driver.quit();
+        //driver.quit();
     }
 
 }

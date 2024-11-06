@@ -79,14 +79,10 @@ public class CartPageTest extends BaseTest {
 
     @Test(priority = 30, retryAnalyzer = RetryAnalyzer.class)
     public void userCanRemoveProductFromCart(){
-        loginUser();
-        int numberOfAddedProducts = 1;
-        inventoryPage.clickOnAddToCartButton(numberOfAddedProducts);
-        Assert.assertTrue(inventoryPage.isNotEmptyCart());
-        Assert.assertEquals(inventoryPage.cartBadge.getText(), String.valueOf(numberOfAddedProducts));
-        inventoryPage.clickOnCartIcon();
+        loginAndAddProductToTheCart();
+        Assert.assertEquals(inventoryPage.cartBadge.getText(), "1");
         Assert.assertFalse(cartPage.cartIsEmpty());
-        cartPage.clickOnRemoveButton(numberOfAddedProducts);
+        cartPage.clickOnRemoveButton(1);
 
         Assert.assertTrue(cartPage.cartIsEmpty());
         Assert.assertFalse(inventoryPage.isNotEmptyCart());

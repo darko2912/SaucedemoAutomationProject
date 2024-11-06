@@ -4,8 +4,9 @@ import Base.BaseTest;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
 
-import java.util.List;
+import java.util.*;
 
 public class InventoryPage extends BaseTest {
 
@@ -23,19 +24,10 @@ public class InventoryPage extends BaseTest {
     public WebElement hamburgerButton;
 
     @FindBy(className = "product_sort_container")
-    public WebElement sortDropdownList;
+    public WebElement selectDropdownList;
 
-    @FindBy(css = "option[value='az']")
-    public WebElement sortNameAtoZ;
-
-    @FindBy(css = "option[value='za']")
-    public WebElement sortNameZtoA;
-
-    @FindBy(css = "option[value='lohi']")
-    public WebElement sortPriceLowToHigh;
-
-    @FindBy(css = "option[value='hilo']")
-    public WebElement sortPriceHighToLow;
+    @FindBy(className = "active_option")
+    public WebElement ActiveSort;
 
     @FindBy(className = "inventory_item_name")
     public List<WebElement> productsName;
@@ -110,25 +102,62 @@ public class InventoryPage extends BaseTest {
         }
         return isPresentProducts;
     }
-
-    public void clickOnSortDropdown(){
-        sortDropdownList.click();
+    //Method to select product sorting options
+    public void selectSortOption(String sortBy){
+        Select dropdown = new Select(selectDropdownList);
+        dropdown.selectByValue(sortBy);
     }
-
-    public void clickOnSortNameAtoZ(){
-        sortNameAtoZ.click();
+    public String getActiveSort() {
+        return ActiveSort.getText();
     }
-
-    public void clickOnSortNameZtoA(){
-        sortNameZtoA.click();
+    //Add products name into list
+    public ArrayList<String> getAllItemsName(){
+        ArrayList<String> products = new ArrayList<>();
+        for (WebElement i : productsName){
+            products.add(i.getText());
+        }
+        return products;
     }
-
-    public void clickOnSortPriceLowToHigh(){
-        sortPriceLowToHigh.click();
+    //Create sorted list for saveList product
+    public ArrayList<String> getSortedList(ArrayList list){
+        Collections.sort(list);
+        return list;
     }
+    //Create reversed list for saveList product
+    public ArrayList<String> getReversedList(ArrayList list){
+        list.sort(Collections.reverseOrder());
+        return list;
+    }
+    //Create double list for products price
+    public ArrayList<Double> getPricesList(){
+        ArrayList<Double> list = new ArrayList<>();
+        for (int i=0; i<priceOfProducts.size(); i++){
+            String price = priceOfProducts.get(i).getText().replaceAll("\\$", "");
+            double p = Double.parseDouble(price);
+            list.add(p);
+        }
+        return list;
+    }
+    //Sort prices list
+    public boolean pricesAreSorted(String sort, ArrayList<Double> list) throws Exception {
+        switch (sort){
+            case "highlow":
+                for (int i=0; i<list.size()-1; i++){
+                    if (list.get(i) < list.get(i+1)){
+                        return false;
+                    }
+                }
+                return true;
+            case "lowhigh":
+                for (int i=0; i<list.size()-1; i++){
+                    if (list.get(i) > list.get(i+1)){
+                        return false;
+                    }
+                }
+                return true;
 
-    public void clickOnSortPriceHighToLow(){
-        sortPriceHighToLow.click();
+            default: throw new Exception("Wrong sort input. Please provide 'highlow' or 'lowhigh'");
+        }
     }
     //Method for clicking multiple add to cart buttons.
     public void clickOnAddToCartButton(int addProducts){

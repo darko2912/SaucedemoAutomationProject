@@ -1,6 +1,7 @@
 package Helpers;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static Base.BaseTest.excelReader;
 
@@ -18,6 +19,25 @@ public class Data {
         items.add("Sauce Labs Onesie");
         items.add("Test.allTheThings() T-Shirt (Red)");
         return items;
+    }
+    //Choose randome product name
+    public String randomProductName(){
+        Random random = new Random();
+        int randomProduct = random.nextInt(listOfItems().size());
+        return listOfItems().get(randomProduct);
+    }
+    //Sort value
+    public static final String AtoZ = "az";
+    public static final String ZtoA = "za";
+    public static final String HighToLow = "hilo";
+    public static final String LowToHigh = "lohi";
+    //Create a list that will add products name and check products layout
+    ArrayList<String> saveList;
+    public ArrayList getSaveList(){
+        return saveList;
+    }
+    public void setSaveList(ArrayList saveList){
+        this.saveList = saveList;
     }
     //Error messages.
     public static final String errorRequireUsername = "Epic sadface: Username is required";
