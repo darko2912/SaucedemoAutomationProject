@@ -46,6 +46,15 @@ public class CheckoutPage extends BaseTest {
     @FindBy(css = "h3[data-test='error']")
     public WebElement errorMessage;
 
+    @FindBy(css = "div[data-test='subtotal-label']")
+    public WebElement subtotalPriceElement;
+
+    @FindBy(css = "div[data-test='tax-label']")
+    public WebElement taxElement;
+
+    @FindBy(css = "div[data-test='total-label']")
+    public WebElement totalPriceElement;
+
     //-----------------------------
 
     public void inputFirstName(String firstName){
@@ -93,5 +102,16 @@ public class CheckoutPage extends BaseTest {
 
     public void clickOnBackHomeButton(){
         backHomeButton.click();
+    }
+
+    //Converting String to double
+    public double subtotalPrice(){
+        return stringToDouble(subtotalPriceElement,"Item total: \\$");
+    }
+    public double tax(){
+        return stringToDouble(taxElement, "Tax: \\$");
+    }
+    public double totalPrice(){
+        return stringToDouble(totalPriceElement, "Total: \\$");
     }
 }

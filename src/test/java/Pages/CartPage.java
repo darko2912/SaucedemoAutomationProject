@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartPage extends BaseTest {
@@ -42,6 +43,9 @@ public class CartPage extends BaseTest {
 
     @FindBy(id = "checkout")
     public WebElement checkoutButton;
+
+    @FindBy(className = "inventory_item_price")
+    public List<WebElement> pricesOfAddedProducts;
 
     //-------------------------------------
     //Method for checking if a specific product is in the cart.
@@ -111,5 +115,22 @@ public class CartPage extends BaseTest {
                 break;
             }
         }
+    }
+    //Create double list for prices of added products
+    public ArrayList<Double> listOfPrices() {
+        ArrayList<Double> list = new ArrayList<>();
+        for (int i = 0; i < pricesOfAddedProducts.size(); i++) {
+            double p = stringToDouble(pricesOfAddedProducts.get(i), "\\$");
+            list.add(p);
+        }
+        return list;
+    }
+    //Addition prices from double list of prices
+    public double totalPriceWithoutTax(){
+        double sum = 0;
+        for (int i=0; i<listOfPrices().size(); i++){
+            sum += listOfPrices().get(i);
+        }
+        return sum;
     }
 }

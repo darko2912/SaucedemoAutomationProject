@@ -43,12 +43,7 @@ public class CheckoutPageTest extends BaseTest {
         loginAndAddProductToTheCart();
         cartPage.clickOnCheckoutButton();
         Assert.assertEquals(driver.getCurrentUrl(), checkoutStepOneURL);
-        String validFirstName = excelReader.getStringData("CheckoutPage",1,0);
-        String validLastName = excelReader.getStringData("CheckoutPage", 1,1);
-        String validPostalCode = String.valueOf(excelReader.getIntegerData("CheckoutPage", 1,2));
-        checkoutPage.inputFirstName(validFirstName);
-        checkoutPage.inputLastName(validLastName);
-        checkoutPage.inputPostalCode(validPostalCode);
+        inputValidInformation();
         checkoutPage.clickOnContinueButton();
 
         Assert.assertTrue(checkoutPage.overviewTitleIsDisplayed());
@@ -123,12 +118,7 @@ public class CheckoutPageTest extends BaseTest {
     public void userCanCancelCheckout(){
         loginAndAddProductToTheCart();
         cartPage.clickOnCheckoutButton();
-        String validFirstName = excelReader.getStringData("CheckoutPage",1,0);
-        String validLastName = excelReader.getStringData("CheckoutPage", 1,1);
-        String validPostalCode = String.valueOf(excelReader.getIntegerData("CheckoutPage", 1,2));
-        checkoutPage.inputFirstName(validFirstName);
-        checkoutPage.inputLastName(validLastName);
-        checkoutPage.inputPostalCode(validPostalCode);
+        inputValidInformation();
         checkoutPage.clickOnContinueButton();
 
         Assert.assertTrue(checkoutPage.overviewTitleIsDisplayed());
@@ -142,8 +132,40 @@ public class CheckoutPageTest extends BaseTest {
         Assert.assertFalse(cartPage.cartIsEmpty());
     }
 
+    @Test(priority = 60, retryAnalyzer = RetryAnalyzer.class)
+    public void subtotalPriceWithoutTaxIsCorrect(){
+        loginUser();
+        inventoryPage.selectSortOption(HighToLow);
+        inventoryPage.clickOnAddToCartButton(2);
+        inventoryPage.clickOnCartIcon();
+        double price = cartPage.totalPriceWithoutTax();
+        cartPage.clickOnCheckoutButton();
+        inputValidInformation();
+        checkoutPage.clickOnContinueButton();
+
+        Assert.assertEquals(driver.getCurrentUrl(), checkoutStepTwoURL);
+        Assert.assertEquals(checkoutPage.subtotalPrice(), price);
+    }
+
+    @Test(priority = 70, retryAnalyzer = RetryAnalyzer.class)
+    public void totalPriceWithTaxIsCorrect(){
+        loginUser();
+        inventoryPage.selectSortOption(HighToLow);
+        inventoryPage.clickOnAddToCartButton(2);
+        inventoryPage.clickOnCartIcon();
+        double price = cartPage.totalPriceWithoutTax();
+        cartPage.clickOnCheckoutButton();
+        inputValidInformation();
+        checkoutPage.clickOnContinueButton();
+        double expectedTotalPrice = price + checkoutPage.tax();
+
+        Assert.assertEquals(driver.getCurrentUrl(), checkoutStepTwoURL);
+        Assert.assertEquals(checkoutPage.totalPrice(), roundingNumbers(expectedTotalPrice));
+    }
+
     @AfterMethod
     public void tearDownTest(){
+        driver.manage().deleteAllCookies();
         driver.quit();
     }
 }

@@ -82,12 +82,7 @@ public class EndToEndTest extends BaseTest {
         Assert.assertEquals(itemPage.cartBadge.getText(), "2");
         //Checkout
         cartPage.clickOnCheckoutButton();
-        String validFirstName = excelReader.getStringData("CheckoutPage",1,0);
-        String validLastName = excelReader.getStringData("CheckoutPage", 1,1);
-        String validPostalCode = String.valueOf(excelReader.getIntegerData("CheckoutPage", 1,2));
-        checkoutPage.inputFirstName(validFirstName);
-        checkoutPage.inputLastName(validLastName);
-        checkoutPage.inputPostalCode(validPostalCode);
+        inputValidInformation();
         checkoutPage.clickOnContinueButton();
         Assert.assertTrue(checkoutPage.overviewTitleIsDisplayed());
         Assert.assertTrue(checkoutPage.overviewIsNotEmpty());

@@ -87,7 +87,7 @@ public class InventoryPageTest extends BaseTest {
     @Test(priority = 60, retryAnalyzer = RetryAnalyzer.class)
     public void userCanOpenAndCloseProduct(){
         loginUser();
-        String productName = listOfItems().get(0);
+        String productName = data.randomProductName();
         inventoryPage.clickOnProduct(productName);
         Assert.assertEquals(itemPage.nameOfProduct.getText(), productName);
         Assert.assertTrue(itemPage.imageCanBeSeen());
@@ -195,7 +195,8 @@ public class InventoryPageTest extends BaseTest {
 
     @AfterMethod
     public void tearDownTest(){
-        //driver.quit();
+        driver.manage().deleteAllCookies();
+        driver.quit();
     }
 
 }

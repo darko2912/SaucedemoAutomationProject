@@ -132,8 +132,7 @@ public class InventoryPage extends BaseTest {
     public ArrayList<Double> getPricesList(){
         ArrayList<Double> list = new ArrayList<>();
         for (int i=0; i<priceOfProducts.size(); i++){
-            String price = priceOfProducts.get(i).getText().replaceAll("\\$", "");
-            double p = Double.parseDouble(price);
+            double p = stringToDouble(priceOfProducts.get(i),"\\$");
             list.add(p);
         }
         return list;

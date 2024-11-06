@@ -124,7 +124,6 @@ public class CartPageTest extends BaseTest {
         inventoryPage.clickOnCartIcon();
         cartPage.clickOnHamburgerButton();
         cartPage.clickOnAboutButton();
-        switchTab(1);
         Assert.assertEquals(driver.getCurrentUrl(), aboutURL);
         Assert.assertEquals(driver.getTitle(), titleAboutPage);
     }
@@ -142,6 +141,7 @@ public class CartPageTest extends BaseTest {
 
     @AfterMethod
     public void tearDownTest(){
+        driver.manage().deleteAllCookies();
         driver.quit();
     }
 }

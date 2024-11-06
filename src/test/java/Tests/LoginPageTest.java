@@ -177,6 +177,7 @@ public class LoginPageTest extends BaseTest {
 
     @AfterMethod
     public void tearDownTest(){
+        driver.manage().deleteAllCookies();
         driver.quit();
     }
 

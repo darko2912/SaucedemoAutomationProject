@@ -11,6 +11,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class BaseTest {
@@ -42,8 +44,8 @@ public class BaseTest {
     }
 
     @AfterClass
-    public void tearDown(){
-        //driver.quit();
+    public void tearDownProcess(){
+        driver.quit();
     }
     //Method for scrolling to the desired element.
     public void scrollToElement(WebElement element) {
@@ -68,5 +70,24 @@ public class BaseTest {
         inventoryPage.clickOnProduct(data.randomProductName());
         itemPage.clickOnAddButton();
         itemPage.clickOnCartIcon();
+    }
+    //Method for converting String to double
+    public double stringToDouble(WebElement text, String remove){
+        String price = text.getText().replaceAll(remove, "");
+        return Double.parseDouble(price);
+    }
+    //Input valid information on checkout page
+    public void inputValidInformation(){
+        String validFirstName = excelReader.getStringData("CheckoutPage",1,0);
+        String validLastName = excelReader.getStringData("CheckoutPage", 1,1);
+        String validPostalCode = String.valueOf(excelReader.getIntegerData("CheckoutPage", 1,2));
+        checkoutPage.inputFirstName(validFirstName);
+        checkoutPage.inputLastName(validLastName);
+        checkoutPage.inputPostalCode(validPostalCode);
+    }
+    //Method for rounding numbers to two decimal places
+    public double roundingNumbers(double num){
+        BigDecimal bd = new BigDecimal(num).setScale(2, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }
