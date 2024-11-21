@@ -98,15 +98,27 @@ public class LoginPageTest extends BaseTest {
     }
 
     @Test (priority = 50, retryAnalyzer = RetryAnalyzer.class)
-    public void userCannotLogInWithEmptyFields(){
+    public void userCannotLogInWithEmptyUsernameField(){
             loginPage.inputUsername("");
-            loginPage.inputPassword("");
+            loginPage.inputPassword(validPassword);
             loginPage.clickOnLoginButton();
 
             Assert.assertEquals(loginURL, driver.getCurrentUrl());
             Assert.assertFalse(inventoryPage.logoutButtonIsDisplayed());
             Assert.assertTrue(loginPage.errorMessage.isDisplayed());
             Assert.assertEquals(loginPage.errorMessage.getText(), errorRequireUsername);
+    }
+
+    @Test(priority = 60, retryAnalyzer = RetryAnalyzer.class)
+    public void userCannotLoginWithEmptyPasswordField(){
+        loginPage.inputUsername(validUsername);
+        loginPage.inputPassword("");
+        loginPage.clickOnLoginButton();
+
+        Assert.assertEquals(loginURL, driver.getCurrentUrl());
+        Assert.assertFalse(inventoryPage.logoutButtonIsDisplayed());
+        Assert.assertTrue(loginPage.errorMessage.isDisplayed());
+        Assert.assertEquals(loginPage.errorMessage.getText(), errorRequirePassword);
     }
 
     @Test (priority = 60, retryAnalyzer = RetryAnalyzer.class)

@@ -41,6 +41,7 @@ public class Data {
     }
     //Error messages.
     public static final String errorRequireUsername = "Epic sadface: Username is required";
+    public static final String errorRequirePassword = "Epic sadface: Password is required";
     public static final String errorIvnalidUsernameAndPassword = "Epic sadface: Username and password do not match any user in this service";
     public static final String errorLockedOutUser = "Epic sadface: Sorry, this user has been locked out.";
     public static final String errorRequireFirstName = "Error: First Name is required";
